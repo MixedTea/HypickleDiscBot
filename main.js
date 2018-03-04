@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Config = require("./config");
-
+const mcApi = require("minecraft-api");
+const http = require("http");
 
 const TOKEN = Config.TOKEN;
 const PREFIX = Config.PREFIX;
@@ -27,10 +28,10 @@ bot.on('message', function(msg){
             msg.channel.send("Pong!");
             break;
         case "info":
-        var embed = new Discord.RichEmbed()
+        var eInfo = new Discord.RichEmbed()
             .addField("Discord Bot Info", Config.info)
             .setThumbnail(msg.author.avatarURL);
-            msg.channel.send(embed);
+            msg.channel.send(eInfo);
             break;
         case "8ball":
             if(args[1]){
@@ -38,6 +39,13 @@ bot.on('message', function(msg){
             } else {
                 msg.channel.send("Maybe, ask a question?");
             }
+            break;
+        case "player":
+        var playerUUID;
+        //https://api.mojang.com/users/profiles/minecraft/<username>
+        http.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], (res) => {
+            console.log(res);
+        });
             break;
         default:
         msg.channel.send("Invalid command!");
