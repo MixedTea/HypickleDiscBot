@@ -5,6 +5,8 @@ const Config = require("./config");
 const TOKEN = Config.TOKEN;
 const PREFIX = Config.PREFIX;
 
+var fortunes = Config.fortunes;
+
 var bot = new Discord.Client();
 
 bot.on("ready", function() {
@@ -28,6 +30,7 @@ bot.on('message', function(msg){
             msg.channel.send(Config.info);
             break;
         case "8ball":
+            msg.channel.send(fortunes[Math.floor(Math.random()* fortunes.length)]);
             break;
     }
 });
