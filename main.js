@@ -20,6 +20,16 @@ bot.on('message', function(msg){
 
     var args = msg.content.substring(PREFIX.length).split(" ");
 
+    switch(args[0].toLowerCase()){
+        case "ping":
+            msg.channel.send("Pong!");
+            break;
+        case "info":
+            msg.channel.send(Config.info);
+            break;
+        case "8ball":
+            break;
+    }
 });
 
 bot.login(TOKEN);
