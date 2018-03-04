@@ -27,11 +27,20 @@ bot.on('message', function(msg){
             msg.channel.send("Pong!");
             break;
         case "info":
-            msg.channel.send(Config.info);
+        var embed = new Discord.RichEmbed()
+            .addField("Discord Bot Info", Config.info)
+            .setThumbnail(msg.author.avatarURL);
+            msg.channel.send(embed);
             break;
         case "8ball":
-            msg.channel.send(fortunes[Math.floor(Math.random()* fortunes.length)]);
+            if(args[1]){
+                msg.channel.send(fortunes[Math.floor(Math.random()* fortunes.length)]);
+            } else {
+                msg.channel.send("Maybe, ask a question?");
+            }
             break;
+        default:
+        msg.channel.send("Invalid command!");
     }
 });
 
