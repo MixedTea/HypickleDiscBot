@@ -1,9 +1,8 @@
 const Discord = require('discord.js');
 const Config = require("./config");
-const commands = require("./commands/commands.js");
-const musicCommands = require("./commands/musicCommands.js");
 
-const TOKIN = Config.TOKEN;
+
+const TOKEN = Config.TOKEN;
 const PREFIX = Config.PREFIX;
 
 var bot = new Discord.Client();
@@ -19,7 +18,8 @@ bot.on('message', function(msg){
 
     if(!msg.content.startsWith(PREFIX)) return;
 
-    var args = msg.content.subString(PREFIX.length).split(" ");
-
+    var args = msg.content.substring(PREFIX.length).split(" ");
 
 });
+
+bot.login(TOKEN);
