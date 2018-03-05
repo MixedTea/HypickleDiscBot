@@ -1,15 +1,16 @@
 const Discord = require('discord.js');
 const Config = require("./config");
-const request = require("request");
 const https = require("https");
-
 
 const TOKEN = Config.TOKEN;
 const PREFIX = Config.PREFIX;
 
+
+
 var fortunes = Config.fortunes;
 
 var bot = new Discord.Client();
+
 
 
 bot.on("ready", function () {
@@ -27,11 +28,8 @@ bot.on('message', function (msg) {
             .setThumbnail(msg.author.avatarURL);
         msg.guild.channels.find("name", "logs").send(eLog);
     }
-
     if (!msg.content.startsWith(PREFIX)) return;
-
     var args = msg.content.substring(PREFIX.length).split(" ");
-
     switch (args[0].toLowerCase()) {
         case "ping":
             msg.channel.send("Pong!");
@@ -39,7 +37,7 @@ bot.on('message', function (msg) {
         case "info":
             var eInfo = new Discord.RichEmbed()
                 .addField("Discord Bot Info", Config.info)
-                .setThumbnail(msg.author.avatarURL);
+                .setThumbnail(bot.user.avatarURL);
             msg.channel.send(eInfo);
             break;
         case "8ball":
@@ -85,7 +83,7 @@ bot.on('message', function (msg) {
                     body = JSON.parse(body);
                     console.log(body.id);
                     //https://api.mojang.com/user/profiles/<uuid>/names
-                    https.get('https://api.mojang.com/user/pr7ofiles/' + body.id + '/names', resp => {
+                    https.get('https://api.mojang.com/user/profiles/' + body.id + '/names', resp => {
                         let names = "";
                         resp.on('data', data => {
                             names += data;
@@ -94,7 +92,7 @@ bot.on('message', function (msg) {
                             names = JSON.parse(names);
                             var eNames = new Discord.RichEmbed()
                                 .setDescription(body.name + "'s name history:");
-                            for(var i = 0; i < names.length; i++){
+                            for (var i = 0; i < names.length; i++) {
                                 eNames.addField("Name #" + (i + 1), names[i].name);
                             }
                             msg.channel.send(eNames);
@@ -102,6 +100,12 @@ bot.on('message', function (msg) {
                     });
                 });
             });
+            break;
+
+        case "avatar":
+            var eAvatar = new Discord.RichEmbed()
+                .setThumbnail(msg.author.avatarURL);
+            msg.channel.send(eAvatar);
             break;
         default:
             msg.channel.send("Invalid command!");
