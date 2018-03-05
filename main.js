@@ -9,20 +9,10 @@ const PREFIX = Config.PREFIX;
 
 var fortunes = Config.fortunes;
 
-var download = function(uri, filename, callback){
-    request.head(uri, function(err, res, body){
-      console.log('content-type:', res.headers['content-type']);
-      console.log('content-length:', res.headers['content-length']);
-  
-      request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-    });
-  };
+var bot = new Discord.Client();
 
 
-  var bot = new Discord.Client();
-
-
-  bot.on("ready", function () {
+bot.on("ready", function () {
     console.log("I am ready");
 });
 
@@ -64,17 +54,16 @@ bot.on('message', function (msg) {
                 });
                 res.on('end', () => {
                     body = JSON.parse(body);
-                    console.log(body.id + " " + body.name);
                     playerUUID = body.id;
                     playerNameCaps = body.name;
+                    var ePlayer = new Discord.RichEmbed()
+                .setTitle("Information on player " + playerNameCaps)
+                .setThumbnail("https://visage.surgeplay.com/head/" + playerUUID)
+                .addField("Hypixel stats: ", "https://plancke.io/hypixel/player/stats/" + playerNameCaps)
+                .addField("NameMC Stats: ", "https://namemc.com/name/" + playerNameCaps);
+                msg.channel.send(ePlayer);
                 });
             });
-            
-            var ePlayer = new Discord.RichEmbed()
-                .setTitle("Information on player " + playerNameCaps)
-                .setThumbnail("https://visage.surgeplay.com/head/" + playerUUID);
-            msg.channel.send(ePlayer);
-            console.log(playerUUID);
             break;
         default:
             msg.channel.send("Invalid command!");
