@@ -19,6 +19,13 @@ bot.on("ready", function () {
 bot.on('message', function (msg) {
     if (msg.author.equals(bot.user)) {
         return;
+    } else {
+        //Logger//
+        var eLog = new Discord.RichEmbed()
+            .setTitle(msg.author.username)
+            .setDescription(msg.content)
+            .setThumbnail(msg.author.avatarURL);
+        msg.guild.channels.find("name", "logs").send(eLog);
     }
 
     if (!msg.content.startsWith(PREFIX)) return;
@@ -57,11 +64,42 @@ bot.on('message', function (msg) {
                     playerUUID = body.id;
                     playerNameCaps = body.name;
                     var ePlayer = new Discord.RichEmbed()
-                .setTitle("Information on player " + playerNameCaps)
-                .setThumbnail("https://visage.surgeplay.com/head/" + playerUUID)
-                .addField("Hypixel stats: ", "https://plancke.io/hypixel/player/stats/" + playerNameCaps)
-                .addField("NameMC Stats: ", "https://namemc.com/name/" + playerNameCaps);
-                msg.channel.send(ePlayer);
+                        .setTitle("Information on player " + playerNameCaps)
+                        .setThumbnail("https://visage.surgeplay.com/head/" + playerUUID)
+                        .addField("Hypixel stats: ", "https://plancke.io/hypixel/player/stats/" + playerNameCaps)
+                        .addField("NameMC Stats: ", "https://namemc.com/name/" + playerNameCaps);
+                    msg.channel.send(ePlayer);
+                });
+            });
+            break;
+
+
+        case "namehistory":
+            https.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], res => {
+                res.setEncoding("utf8");
+                let body = "";
+                res.on('data', data => {
+                    body += data;
+                });
+                res.on('end', () => {
+                    body = JSON.parse(body);
+                    console.log(body.id);
+                    //https://api.mojang.com/user/profiles/<uuid>/names
+                    https.get('https://api.mojang.com/user/profiles/' + body.id + '/names', resp => {
+                        let names = "";
+                        resp.on('data', data => {
+                            names += data;
+                        });
+                        resp.on('end', () => {
+                            names = JSON.parse(names);
+                            var eNames = new Discord.RichEmbed()
+                                .setDescription(body.name + "'s name history:");
+                            for(var i = 0; i < names.length; i++){
+                                eNames.addField("Name #" + (i + 1), names[i].name);
+                            }
+                            msg.channel.send(eNames);
+                        });
+                    });
                 });
             });
             break;
