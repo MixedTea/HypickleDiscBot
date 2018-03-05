@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const Config = require("./config");
 const request = require("request");
 const https = require("https");
-const downIMG = require("download-image");
+
 
 const TOKEN = Config.TOKEN;
 const PREFIX = Config.PREFIX;
@@ -85,7 +85,7 @@ bot.on('message', function (msg) {
                     body = JSON.parse(body);
                     console.log(body.id);
                     //https://api.mojang.com/user/profiles/<uuid>/names
-                    https.get('https://api.mojang.com/user/profiles/' + body.id + '/names', resp => {
+                    https.get('https://api.mojang.com/user/pr7ofiles/' + body.id + '/names', resp => {
                         let names = "";
                         resp.on('data', data => {
                             names += data;
