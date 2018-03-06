@@ -1,5 +1,3 @@
--combine the player and namehistory command into one and make a >hypixle command.
--make a super lit music bot with a volume control command and search music and not link
--possible integrate spotify as an option the the music portion of the bot.
+-Make a >hypixel command.
 -make the hypixel command retreive infomation from the hypixle api which will be hard but possible.
--make more fancy commands having to do with skins, maybe make one super cabable command
+-make more fancy commands having to do with skins, maybe make one super cabable command.
