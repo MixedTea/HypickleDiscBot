@@ -84,10 +84,23 @@ bot.on('message', function (msg) {
             });
             break;
 
-        case "avatar":
-            var eAvatar = new Discord.RichEmbed()
-                .setThumbnail(msg.author.avatarURL);
-            msg.channel.send(eAvatar);
+        case "skin":
+                https.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], res => {
+                    res.setEncoding("utf8");
+                    let body = "";
+                    res.on('data', data => {
+                        body += data;
+                    });
+                    res.on('end', () => {
+                       body = JSON.parse(body);
+                       var eSkin = new Discord.RichEmbed()
+                        .setTitle(body.name + "'s skin:")
+                        .setImage("https://visage.surgeplay.com/full/" + body.id)
+                        .setThumbnail("https://visage.surgeplay.com/skin/" + body.id)
+                        .setDescription("https://namemc.com/profile/" + body.name);
+                        msg.channel.send(eSkin);
+                    });
+                });
             break;
         default:
             msg.channel.send("Invalid command!");
