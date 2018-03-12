@@ -27,6 +27,16 @@ bot.on('message', function (msg) {
             .setDescription(msg.content)
             .setThumbnail(msg.author.avatarURL);
         msg.guild.channels.find("name", "logs").send(eLog);
+        
+        if(msg.content.indexOf("discord bots are bad") > 0 || (msg.content.indexOf("discord bots") > 0 && msg.content.indexOf("are bad") > 0) || (msg.content.indexOf("discord") > 0 && msg.content.indexOf("bots") > 0 && msg.content.indexOf("are") > 0 && msg.content.indexOf("bad") > 0 )){
+            msg.channel.send("no u");
+        }
+        if(msg.content == "discord bots are bad"){
+            msg.channel.send("wana get banhammered?");
+        }
+        if(msg.content == "ur mom gay"){
+            msg.channel.send("no u");
+        }
     }
     if (!msg.content.startsWith(PREFIX)) return;
     var args = msg.content.substring(PREFIX.length).split(" ");

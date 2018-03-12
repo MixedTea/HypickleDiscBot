@@ -1,3 +1,3 @@
 -Make a >hypixel command.
 -make the hypixel command retreive infomation from the hypixle api which will be hard but possible.
--make more fancy commands having to do with skins, maybe make one super cabable command.
+
