@@ -136,6 +136,16 @@ bot.on('message', function (msg) {
                 });
             });
             break;
+        case "help":
+            var eHelp = new Discord.RichEmbed()
+                .setThumbnail(bot.avatarURL)
+                .setTitle("Commands:");
+            for(var i = 0; i < Config.commands.length; i++){
+                eHelp.addField(Config.commands[i].name, Config.commands[i].description + "\n Use: " + Config.commands[i].use);
+            }
+            msg.channel.send("Sent you a dm with a list of commands!");
+            msg.author.send(eHelp);
+            break;
         default:
             msg.channel.send("Invalid command!");
     }
