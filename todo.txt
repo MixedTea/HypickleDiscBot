@@ -1,2 +1,0 @@
--Make the UHC Score into stars (kill me)
--Make skywars wins and kills include ranked skywars stats

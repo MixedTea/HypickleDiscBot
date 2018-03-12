@@ -1,27 +1,28 @@
 const Discord = require('discord.js');
 const Config = require("./config");
 const https = require("https");
+const reference = require('./reference');
 
 const TOKEN = Config.TOKEN;
-const PREFIX = Config.PREFIX;
+const PREFIX = reference.PREFIX;
 const API_KEY = Config.API_KEY;
 
 
-var fortunes = Config.fortunes;
+var fortunes = reference.fortunes;
 
 var bot = new Discord.Client();
 
-
+var stars = reference.stars;
 
 bot.on("ready", function () {
     console.log("I am ready");
-    bot.user.setActivity("on " + bot.guilds.size + " servers");
+    bot.user.setActivity("on " + bot.guilds.size + " servers >help");
 });
 bot.on("guildCreate", () => {
-    bot.user.setActivity("on " + bot.guilds.size + " servers");
+    bot.user.setActivity("on " + bot.guilds.size + " servers. >help");
 });
 bot.on("guildDelete", () => {
-    bot.user.setActivity("on " + bot.guilds.size + " servers");
+    bot.user.setActivity("on " + bot.guilds.size + " servers. >help");
 });
 bot.on('message', function (msg) {
     if (msg.author.equals(bot.user)) {
@@ -60,13 +61,19 @@ bot.on('message', function (msg) {
             break;
         case "info":
             var eInfo = new Discord.RichEmbed()
-                .addField("Discord Bot Info", Config.info)
+                .addField("Discord Bot Info", reference.info)
                 .setThumbnail(bot.user.avatarURL);
             msg.channel.send(eInfo);
             break;
         case "8ball":
+            
             if (args[1]) {
-                msg.channel.send(fortunes[Math.floor(Math.random() * fortunes.length)]);
+                
+                if(args[1] == 'is' && args[2] == 'caden' && args[3] == 'racist'){
+                    msg.channel.send('Maybe');
+                } else {
+                    msg.channel.send(fortunes[Math.floor(Math.random() * fortunes.length)]);
+                }
             } else {
                 msg.channel.send("Maybe, ask a question?");
             }
@@ -155,10 +162,10 @@ bot.on('message', function (msg) {
                 .setThumbnail(bot.user.avatarURL)
                 .setTitle("Commands:")
                 .setColor('BLUE');
-            for (var i = 0; i < Config.commands.length; i++) {
-                eHelp.addField(Config.commands[i].name, Config.commands[i].description + "\nUse: " + Config.commands[i].use);
+            for (var i = 0; i < reference.commands.length; i++) {
+                eHelp.addField(reference.commands[i].name, reference.commands[i].description + "\nUse: " + reference.commands[i].use);
             }
-            msg.channel.send(msg.author + "Sent you a dm with a list of commands!");
+            msg.channel.send(msg.author + " Sent you a dm with a list of commands!");
             msg.author.send(eHelp);
             break;
         case "hypixel":
@@ -180,22 +187,56 @@ bot.on('message', function (msg) {
                         msg.channel.send("Invalid Username!");
                     }
                     if(!err) {
-                        var skywars_wins = body.player.achievements.skywars_wins_solo + body.player.achievements.skywars_wins_team + body.player.achievements.skywars_wins_mega;
-                        var skywars_kills = body.player.achievements.skywars_kills_solo + body.player.achievements.skywars_kills_team + body.player.achievements.skywars_kills_mega;
+                        var skywars_wins = body.player.stats.SkyWars.wins;
+                        var skywars_kills = body.player.stats.SkyWars.kills;
                         var bedwars_wins = body.player.achievements.bedwars_wins;
                         var bedwars_stars = body.player.achievements.bedwars_level;
-                        var uhc_stars = body.player.achievements.uhc_moving_up;
+                        var uhc_score = body.player.achievements.uhc_moving_up;
                         var uhc_wins = body.player.achievements.uhc_champion;
                         var uhc_kills = body.player.achievements.uhc_hunter;       
-                        
+                        var uhc_stars;
+                        console.log(body.player.stats.SkyWars.wins);
+                        if(uhc_score >= 25210){
+                            uhc_stars = 15;
+                        } else if(uhc_score >= 22210){
+                            uhc_stars = 14;
+                        } else if(uhc_score >= 19210){
+                            uhc_stars = 13;
+                        } else if(uhc_score >= 16210){
+                            uhc_stars = 12;
+                        } else if(uhc_score >= 13210){
+                            uhc_stars = 11;
+                        } else if(uhc_score >= 10210){
+                            uhc_stars = 10;
+                        } else if(uhc_score >= 5210){
+                            uhc_stars = 9;
+                        } else if(uhc_score >= 2710){
+                            uhc_stars = 8;
+                        } else if(uhc_score >= 1710){
+                            uhc_stars = 7;
+                        } else if(uhc_score >= 960){
+                            uhc_stars = 6;
+                        } else if(uhc_score >= 460){
+                            uhc_stars = 5;
+                        } else if(uhc_score >= 210){
+                            uhc_stars = 4;
+                        } else if(uhc_score >= 60){
+                            uhc_stars = 3;
+                        } else if(uhc_score >= 10){
+                            uhc_stars = 2;
+                        } else if(uhc_score >= 0){
+                            uhc_stars = 1;
+                        }
+
                         var eStats = new Discord.RichEmbed()
                             .setTitle("Hypixel Stats for player: " + args[1])
                             .setThumbnail('https://visage.surgeplay.com/full/' + body.player._id)
-                            .addField("Skywars Wins (Doesn't include ranked wins): ", skywars_wins, false)
-                            .addField("Skywars Kills (Doesn't include ranked kills):  ", skywars_kills, true)
+                            .addField("Skywars Wins: ", skywars_wins, false)
+                            .addField("Skywars Kills:  ", skywars_kills, true)
                             .addField('Bedwars Wins: ', bedwars_wins, false)
                             .addField("Bedwars Stars: ", bedwars_stars, true)
-                            .addField("UHC Score: ", uhc_stars, false)
+                            .addField("UHC Score: ", uhc_score, false)
+                            .addField("UHC Stars: ", uhc_stars)
                             .addField("UHC Wins: ", uhc_wins, false)
                             .addField("UHC Kills: ", uhc_kills, true)
                             .setColor("DARK_GREEN");
@@ -203,6 +244,9 @@ bot.on('message', function (msg) {
                     }
                 });
             });
+            break;
+        case "caden": 
+            msg.channel.send("Who knows he might be racist");
             break;
         default:
             msg.channel.send("Invalid command!");
