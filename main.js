@@ -54,6 +54,9 @@ bot.on('message', function (msg) {
                 res.on('data', data => {
                     body += data;
                 });
+                res.on("error", () => {
+                    msg.channel.send("Invalid Username! Try checking your spelling.");
+                });
                 res.on('end', () => {
                     body = JSON.parse(body);
                     console.log(body.id);
@@ -77,7 +80,10 @@ bot.on('message', function (msg) {
                                 eNames.addField("Name #" + (i + 1), names[i].name);
                             }
                             msg.channel.send(eNames);
-                            
+                            resp.on("error", () => {
+                                msg.channel.send("Invalid Username! Try checking your spelling.");
+                            });
+
                         });
                     });
                 });
@@ -85,22 +91,28 @@ bot.on('message', function (msg) {
             break;
 
         case "skin":
-                https.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], res => {
-                    res.setEncoding("utf8");
-                    let body = "";
-                    res.on('data', data => {
-                        body += data;
-                    });
-                    res.on('end', () => {
-                       body = JSON.parse(body);
-                       var eSkin = new Discord.RichEmbed()
+            https.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], res => {
+                res.setEncoding("utf8");
+                let body = '';
+                res.on('data', data => {
+                    body += data;
+                });
+                res.on('end', () => {
+                   body = JSON.parse(body);
+                    var eSkin = new Discord.RichEmbed()
                         .setTitle(body.name + "'s skin:")
                         .setImage("https://visage.surgeplay.com/full/" + body.id)
                         .setThumbnail("https://visage.surgeplay.com/skin/" + body.id)
                         .setDescription("https://namemc.com/profile/" + body.name);
-                        msg.channel.send(eSkin);
-                    });
+                    msg.channel.send(eSkin);
                 });
+                res.on("error", () => {
+                    msg.channel.send("Invalid Username! Try checking your spelling.");
+                });
+            }).on("error", (e) => {
+                console.log(e);
+                msg.channel.send(e);
+            });
             break;
         default:
             msg.channel.send("Invalid command!");
