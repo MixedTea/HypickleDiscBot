@@ -1,3 +1,0 @@
--Make a >hypixel command.
--make the hypixel command retreive infomation from the hypixle api which will be hard but possible.
-
