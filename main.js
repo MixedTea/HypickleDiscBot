@@ -192,12 +192,13 @@ bot.on('message', function (msg) {
                             .setTitle("Hypixel Stats for player: " + args[1])
                             .setThumbnail('https://visage.surgeplay.com/full/' + body.player._id)
                             .addField("Skywars Wins (Doesn't include ranked wins): ", skywars_wins, false)
-                            .addField('Skywars Kills: ', skywars_kills, true)
+                            .addField("Skywars Kills (Doesn't include ranked kills):  ", skywars_kills, true)
                             .addField('Bedwars Wins: ', bedwars_wins, false)
                             .addField("Bedwars Stars: ", bedwars_stars, true)
                             .addField("UHC Score: ", uhc_stars, false)
                             .addField("UHC Wins: ", uhc_wins, false)
-                            .addField("UHC Kills: ", uhc_kills, true);
+                            .addField("UHC Kills: ", uhc_kills, true)
+                            .setColor("DARK_GREEN");
                         msg.channel.send(eStats);
                     }
                 });
