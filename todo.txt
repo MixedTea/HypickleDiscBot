@@ -1,3 +1,5 @@
 -make a >compare command
--make the ping command actually ping in miliseconds
--make a profanity filter that is toggleable
+-make a custom meme generator
+-make a toggleable profanity filter
+-make a custom embed command
+thing
