@@ -66,11 +66,13 @@ bot.on('message', function (msg) {
             msg.channel.send(eInfo);
             break;
         case "8ball":
-            
+
             if (args[1]) {
-                
-                if(args[1] == 'is' && args[2] == 'caden' && args[3] == 'racist'){
+
+                if (args[1] == 'is' && args[2] == 'caden' && args[3] == 'racist') {
                     msg.channel.send('Maybe');
+                } else if (args[1] == "am" && args[2] == "i" && args[3] == "suicidal") {
+                    msg.channel.send("Aren't we all?");
                 } else {
                     msg.channel.send(fortunes[Math.floor(Math.random() * fortunes.length)]);
                 }
@@ -178,53 +180,53 @@ bot.on('message', function (msg) {
                     var err = false;
                     try {
                         body = JSON.parse(body);
-                    } catch(e) {
+                    } catch (e) {
                         msg.channel.send("Invalid username!");
                         err = true;
                     }
-                    if(body.player == null){
+                    if (body.player == null) {
                         err = true;
                         msg.channel.send("Invalid Username!");
                     }
-                    if(!err) {
+                    if (!err) {
                         var skywars_wins = body.player.stats.SkyWars.wins;
                         var skywars_kills = body.player.stats.SkyWars.kills;
                         var bedwars_wins = body.player.achievements.bedwars_wins;
                         var bedwars_stars = body.player.achievements.bedwars_level;
                         var uhc_score = body.player.achievements.uhc_moving_up;
                         var uhc_wins = body.player.achievements.uhc_champion;
-                        var uhc_kills = body.player.achievements.uhc_hunter;       
+                        var uhc_kills = body.player.achievements.uhc_hunter;
                         var uhc_stars;
                         console.log(body.player.stats.SkyWars.wins);
-                        if(uhc_score >= 25210){
+                        if (uhc_score >= 25210) {
                             uhc_stars = 15;
-                        } else if(uhc_score >= 22210){
+                        } else if (uhc_score >= 22210) {
                             uhc_stars = 14;
-                        } else if(uhc_score >= 19210){
+                        } else if (uhc_score >= 19210) {
                             uhc_stars = 13;
-                        } else if(uhc_score >= 16210){
+                        } else if (uhc_score >= 16210) {
                             uhc_stars = 12;
-                        } else if(uhc_score >= 13210){
+                        } else if (uhc_score >= 13210) {
                             uhc_stars = 11;
-                        } else if(uhc_score >= 10210){
+                        } else if (uhc_score >= 10210) {
                             uhc_stars = 10;
-                        } else if(uhc_score >= 5210){
+                        } else if (uhc_score >= 5210) {
                             uhc_stars = 9;
-                        } else if(uhc_score >= 2710){
+                        } else if (uhc_score >= 2710) {
                             uhc_stars = 8;
-                        } else if(uhc_score >= 1710){
+                        } else if (uhc_score >= 1710) {
                             uhc_stars = 7;
-                        } else if(uhc_score >= 960){
+                        } else if (uhc_score >= 960) {
                             uhc_stars = 6;
-                        } else if(uhc_score >= 460){
+                        } else if (uhc_score >= 460) {
                             uhc_stars = 5;
-                        } else if(uhc_score >= 210){
+                        } else if (uhc_score >= 210) {
                             uhc_stars = 4;
-                        } else if(uhc_score >= 60){
+                        } else if (uhc_score >= 60) {
                             uhc_stars = 3;
-                        } else if(uhc_score >= 10){
+                        } else if (uhc_score >= 10) {
                             uhc_stars = 2;
-                        } else if(uhc_score >= 0){
+                        } else if (uhc_score >= 0) {
                             uhc_stars = 1;
                         }
 
@@ -245,8 +247,113 @@ bot.on('message', function (msg) {
                 });
             });
             break;
-        case "caden": 
+        case "caden":
             msg.channel.send("Who knows he might be racist");
+            break;
+        case "compare":
+
+            if (!args[1] || !args[2]) {
+                msg.channel.send(msg.author + " What two players do you want to compare?\n>compare [player1] [player2]");
+                break;
+            }
+            var player1SkywarsKDR;
+            var player1BedwarsFinalKDR;
+            var player1UhcKDR;
+            var player1score = 0;
+            var player2SkywarsKDR;
+            var player2BedwarsFinalKDR;
+            var player2UhcKDR;
+            var player2score = 0;
+            //getting player1 stats
+            https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[1], res => {
+                let body = '';
+                var err = false;
+                res.on("data", data => {
+                    body += data;
+                });
+                res.on('end', () => {
+                    try {
+                        body = JSON.parse(body);
+                    } catch (e) {
+                        msg.channel.send(msg.author + " Player1 is an invalid username!");
+                        err = true;
+                    }
+                    if (body.player == null) {
+                        msg.channel.send(msg.author + " Player1 is an invalid username!");
+                        err = true;
+                    }
+                    if (!err) {
+                        player1SkywarsKDR = body.player.stats.SkyWars.kills / body.player.stats.SkyWars.deaths;
+                        player1BedwarsFinalKDR = body.player.stats.Bedwars.final_kills_bedwars / body.player.stats.Bedwars.final_deaths_bedwars;
+                        player1UhcKDR = body.player.stats.UHC.kills / body.player.stats.UHC.deaths;
+                        console.log(player1BedwarsFinalKDR + " " + player1SkywarsKDR + " " + player1UhcKDR);
+                    }
+                });
+            });
+            //get player2 stats
+            https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[2], res => {
+                let body = '';
+                var err = false;
+                res.on("data", data => {
+                    body += data;
+                });
+                res.on('end', () => {
+                    try {
+                        body = JSON.parse(body);
+                    } catch (e) {
+                        msg.channel.send(msg.author + " Player2 is an invalid username!");
+                        err = true;
+                    }
+                    if (body.player == null) {
+                        msg.channel.send(msg.author + " Player2 is an invalid username!");
+                        err = true;
+                    }
+                    if (!err) {
+                        player2SkywarsKDR = body.player.stats.SkyWars.kills / body.player.stats.SkyWars.deaths;
+                        player2BedwarsFinalKDR = body.player.stats.Bedwars.final_kills_bedwars / body.player.stats.Bedwars.final_deaths_bedwars;
+                        player2UhcKDR = body.player.stats.UHC.kills / body.player.stats.UHC.deaths;
+                        console.log(player2BedwarsFinalKDR + " " + player2SkywarsKDR + " " + player2UhcKDR);
+                    }
+                });
+            });
+
+            //actually compare
+            if (player1SkywarsKDR > player2SkywarsKDR) {
+                player1score++;
+            } else if(player2SkywarsKDR > player1SkywarsKDR){
+                player2score++;
+            } else {
+                console.log("something went wrong1");
+            }
+            if (player1BedwarsFinalKDR > player2BedwarsFinalKDR) {
+                player1score++;
+            } else if(player2BedwarsFinalKDR > player1BedwarsFinalKDR){
+                player2score++;
+            } else {
+                console.log("something went wrong2");
+            }
+            if (player1UhcKDR > player2UhcKDR) {
+                player1score++;
+            } else  if(player2UhcKDR > player1UhcKDR){
+                player2score++;
+            } else {
+                console.log("something went wrong3");
+            }
+
+            //final decision
+            console.log(player1score);
+            console.log(player2score);
+            if (player1score > player2score) {
+                var eVictory = new Discord.RichEmbed()
+                    .setTitle(args[1] + " VS. " + args[2])
+                    .setDescription(args[1] + ' is better than ' + args[2] + "!");
+                    msg.channel.send(eVictory);
+            } else if (player2score > player1score) {
+                var eVictory = new Discord.RichEmbed()
+                    .setTitle(args[1] + " VS. " + args[2])
+                    .setDescription(args[2] + ' is better than ' + args[1] + "!");
+                    msg.channel.send(eVictory);
+            }
             break;
         default:
             msg.channel.send("Invalid command!");
