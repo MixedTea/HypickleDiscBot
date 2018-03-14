@@ -1,5 +1,3 @@
--make a >compare command
 -make a custom meme generator
 -make a toggleable profanity filter
 -make a custom embed command
-thing

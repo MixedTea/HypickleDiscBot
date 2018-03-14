@@ -30,9 +30,9 @@ module.exports.commands = [
         "use": ">hypixel [ign]"
     },
     {
-        "name": "Caden",
-        "description": "Tells you a famous quote from caden",
-        "use": ">caden"
+        "name": "Compare",
+        "description": "Makes a comparison between the KDR of two different players.",
+        "use": ">compare [player1] [player2] stats(optional)"
     }
 ]
 module.exports.PREFIX = ">";

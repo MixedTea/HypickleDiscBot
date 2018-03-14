@@ -287,73 +287,85 @@ bot.on('message', function (msg) {
                         player1BedwarsFinalKDR = body.player.stats.Bedwars.final_kills_bedwars / body.player.stats.Bedwars.final_deaths_bedwars;
                         player1UhcKDR = body.player.stats.UHC.kills / body.player.stats.UHC.deaths;
                         console.log(player1BedwarsFinalKDR + " " + player1SkywarsKDR + " " + player1UhcKDR);
-                    }
-                });
-            });
-            //get player2 stats
-            https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[2], res => {
-                let body = '';
-                var err = false;
-                res.on("data", data => {
-                    body += data;
-                });
-                res.on('end', () => {
-                    try {
-                        body = JSON.parse(body);
-                    } catch (e) {
-                        msg.channel.send(msg.author + " Player2 is an invalid username!");
-                        err = true;
-                    }
-                    if (body.player == null) {
-                        msg.channel.send(msg.author + " Player2 is an invalid username!");
-                        err = true;
-                    }
-                    if (!err) {
-                        player2SkywarsKDR = body.player.stats.SkyWars.kills / body.player.stats.SkyWars.deaths;
-                        player2BedwarsFinalKDR = body.player.stats.Bedwars.final_kills_bedwars / body.player.stats.Bedwars.final_deaths_bedwars;
-                        player2UhcKDR = body.player.stats.UHC.kills / body.player.stats.UHC.deaths;
-                        console.log(player2BedwarsFinalKDR + " " + player2SkywarsKDR + " " + player2UhcKDR);
+                        //get player2 stats
+                        https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[2], resp => {
+                            let info = '';
+                            var error = false;
+                            resp.on("data", data => {
+                                info += data;
+                            });
+                            resp.on('end', () => {
+                                try {
+                                    info = JSON.parse(info);
+                                } catch (e) {
+                                    msg.channel.send(msg.author + " Player2 is an invalid username!");
+                                    error = true;
+                                }
+                                if (info.player == null) {
+                                    msg.channel.send(msg.author + " Player2 is an invalid username!");
+                                    error = true;
+                                }
+                                if (!error) {
+                                    player2SkywarsKDR = info.player.stats.SkyWars.kills / info.player.stats.SkyWars.deaths;
+                                    player2BedwarsFinalKDR = info.player.stats.Bedwars.final_kills_bedwars / info.player.stats.Bedwars.final_deaths_bedwars;
+                                    player2UhcKDR = info.player.stats.UHC.kills / info.player.stats.UHC.deaths;
+                                    console.log(player2BedwarsFinalKDR + " " + player2SkywarsKDR + " " + player2UhcKDR);
+                                    //actually compare
+                                    if (player1SkywarsKDR > player2SkywarsKDR) {
+                                        player1score++;
+                                    } else if (player2SkywarsKDR > player1SkywarsKDR) {
+                                        player2score++;
+                                    } else {
+                                        console.log("something went wrong1");
+                                    }
+                                    if (player1BedwarsFinalKDR > player2BedwarsFinalKDR) {
+                                        player1score++;
+                                    } else if (player2BedwarsFinalKDR > player1BedwarsFinalKDR) {
+                                        player2score++;
+                                    } else {
+                                        console.log("something went wrong2");
+                                    }
+                                    if (player1UhcKDR > player2UhcKDR) {
+                                        player1score++;
+                                    } else if (player2UhcKDR > player1UhcKDR) {
+                                        player2score++;
+                                    } else {
+                                        console.log("something went wrong3");
+                                    }
+                                    console.log(player1BedwarsFinalKDR);
+                                    //final decision
+                                    console.log(player1score);
+                                    console.log(player2score);
+                                    if (player1score > player2score) {
+                                        var eVictory = new Discord.RichEmbed()
+                                            .setTitle(args[1] + ' is better than ' + args[2] + "!")
+                                            .setColor("BLUE");
+                                        msg.channel.send(eVictory);
+                                    } else if (player2score > player1score) {
+                                        var eVictory = new Discord.RichEmbed()
+                                            .setTitle(args[2] + ' is better than ' + args[1] + "!")
+                                            .setColor("BLUE");
+                                        msg.channel.send(eVictory);
+                                    }
+                                    if(args[3] == "stats"){
+                                        var eStats = new Discord.RichEmbed()
+                                            .setTitle("Stats of comparison: ")
+                                            .addField(args[1]+ "'s Skywars KDR:", player1SkywarsKDR.toFixed(2), false)
+                                            .addField(args[1]+ "'s UHC Champions KDR:", player1UhcKDR.toFixed(2),false)
+                                            .addField(args[1]+ "'s Bedwars Final KDR:", player1BedwarsFinalKDR.toFixed(2), false)
+                                            .addField(args[2]+ "'s Skywars KDR:", player2SkywarsKDR.toFixed(2), false)
+                                            .addField(args[2]+ "'s Bedwars Final KDR:", player2BedwarsFinalKDR.toFixed(2), false)
+                                            .addField(args[2]+ "'s UHC Champions KDR:", player2UhcKDR.toFixed(2), false)
+                                            .setColor("GREEN");
+                                        msg.channel.send(eStats);
+                                    }
+                                }
+                            });
+                        });
                     }
                 });
             });
 
-            //actually compare
-            if (player1SkywarsKDR > player2SkywarsKDR) {
-                player1score++;
-            } else if(player2SkywarsKDR > player1SkywarsKDR){
-                player2score++;
-            } else {
-                console.log("something went wrong1");
-            }
-            if (player1BedwarsFinalKDR > player2BedwarsFinalKDR) {
-                player1score++;
-            } else if(player2BedwarsFinalKDR > player1BedwarsFinalKDR){
-                player2score++;
-            } else {
-                console.log("something went wrong2");
-            }
-            if (player1UhcKDR > player2UhcKDR) {
-                player1score++;
-            } else  if(player2UhcKDR > player1UhcKDR){
-                player2score++;
-            } else {
-                console.log("something went wrong3");
-            }
-
-            //final decision
-            console.log(player1score);
-            console.log(player2score);
-            if (player1score > player2score) {
-                var eVictory = new Discord.RichEmbed()
-                    .setTitle(args[1] + " VS. " + args[2])
-                    .setDescription(args[1] + ' is better than ' + args[2] + "!");
-                    msg.channel.send(eVictory);
-            } else if (player2score > player1score) {
-                var eVictory = new Discord.RichEmbed()
-                    .setTitle(args[1] + " VS. " + args[2])
-                    .setDescription(args[2] + ' is better than ' + args[1] + "!");
-                    msg.channel.send(eVictory);
-            }
             break;
         default:
             msg.channel.send("Invalid command!");
