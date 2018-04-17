@@ -369,4 +369,4 @@ bot.on('message', function (msg) {
     }
 });
 
-bot.login(process.env.TOKEN);
+bot.login(TOKEN);
