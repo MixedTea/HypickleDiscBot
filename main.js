@@ -56,9 +56,9 @@ bot.on('message', function (msg) {
     if (!msg.content.startsWith(PREFIX)) return;
     var args = msg.content.substring(PREFIX.length).split(" ");
     switch (args[0].toLowerCase()) {
-        case "ping":
+  /*      case "ping":
             msg.channel.send("Pong!");
-            break;
+            break; */
         case "info":
             var eInfo = new Discord.RichEmbed()
                 .addField("Discord Bot Info", reference.info)
@@ -246,9 +246,6 @@ bot.on('message', function (msg) {
                     }
                 });
             });
-            break;
-        case "caden":
-            msg.channel.send("Who knows he might be racist");
             break;
         case "compare":
 
