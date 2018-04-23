@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
-const Config = require("./config");
+//const Config = require("./config");
 const https = require("https");
 const reference = require('./reference');
 
-const TOKEN = Config.TOKEN;
+const TOKEN = process.env.TOKEN;
 const PREFIX = reference.PREFIX;
-const API_KEY = Config.API_KEY;
+const API_KEY = process.env.API_KEY;
 
 
 var fortunes = reference.fortunes;
