@@ -76,7 +76,7 @@ bot.on('message', function (msg) {
                 }
             } else if (args[1]) {
                 msg.channel.send(currentRig);
-                currentRig == null;
+                currentRig = null;
             } else {
                 msg.channel.send("Maybe, ask a question?");
             }
@@ -282,17 +282,8 @@ bot.on('message', function (msg) {
                     }
                     if (!err) {
                         player1SkywarsKDR = body.player.stats.SkyWars.kills / body.player.stats.SkyWars.deaths;
-                        if (player1SkywarsKDR == NaN) {
-                            player1SkywarsKDR = 0;
-                        }
                         player1BedwarsFinalKDR = body.player.stats.Bedwars.final_kills_bedwars / body.player.stats.Bedwars.final_deaths_bedwars;
-                        if (player1BedwarsFinalKDR == NaN) {
-                            player1BedwarsFinalKDR = 0;
-                        }
                         player1UhcKDR = body.player.stats.UHC.kills / body.player.stats.UHC.deaths;
-                        if (player1UhcKDR == NaN) {
-                            player1UhcKDR = 0;
-                        }
                         console.log(player1BedwarsFinalKDR + " " + player1SkywarsKDR + " " + player1UhcKDR);
                         //get player2 stats
                         https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[2], resp => {
@@ -314,17 +305,8 @@ bot.on('message', function (msg) {
                                 }
                                 if (!error) {
                                     player2SkywarsKDR = info.player.stats.SkyWars.kills / info.player.stats.SkyWars.deaths;
-                                    if (player2SkywarsKDR == NaN) {
-                                        player2SkywarsKDR = 0;
-                                    }
                                     player2BedwarsFinalKDR = info.player.stats.Bedwars.final_kills_bedwars / info.player.stats.Bedwars.final_deaths_bedwars;
-                                    if (player2BedwarsFinalKDR == NaN) {
-                                        player2BedwarsFinalKDR = 0;
-                                    }
                                     player2UhcKDR = info.player.stats.UHC.kills / info.player.stats.UHC.deaths;
-                                    if (player2UhcKDR == NaN) {
-                                        player2UhcKDR = 0;
-                                    }
                                     console.log(player2BedwarsFinalKDR + " " + player2SkywarsKDR + " " + player2UhcKDR);
                                     //actually compare
                                     if (player1SkywarsKDR > player2SkywarsKDR) {
@@ -352,18 +334,19 @@ bot.on('message', function (msg) {
                                     //final decision
                                     console.log(player1score);
                                     console.log(player2score);
+                                    var eVictory;
                                     if (player1score > player2score) {
-                                        var eVictory = new Discord.RichEmbed()
+                                        eVictory = new Discord.RichEmbed()
                                             .setTitle(args[1] + ' is better than ' + args[2] + "!")
                                             .setColor("BLUE");
                                         msg.channel.send(eVictory);
                                     } else if (player2score > player1score) {
-                                        var eVictory = new Discord.RichEmbed()
+                                        eVictory = new Discord.RichEmbed()
                                             .setTitle(args[2] + ' is better than ' + args[1] + "!")
                                             .setColor("BLUE");
                                         msg.channel.send(eVictory);
                                     } else if (player1score == player2score) {
-                                        var eVictory = new Discord.RichEmbed()
+                                        eVictory = new Discord.RichEmbed()
                                             .setTitle("Its a tie!")
                                             .setColor("BLUE");
                                         msg.channel.send(eVictory);
