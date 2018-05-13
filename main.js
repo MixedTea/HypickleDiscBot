@@ -7,6 +7,7 @@ const TOKEN = process.env.TOKEN;
 const PREFIX = reference.PREFIX;
 const API_KEY = process.env.API_KEY;
 
+var currentRig = null;
 
 var fortunes = reference.fortunes;
 
@@ -51,14 +52,12 @@ bot.on('message', function (msg) {
             msg.channel.send("no u");
         }
     }
-
-
     if (!msg.content.startsWith(PREFIX)) return;
     var args = msg.content.substring(PREFIX.length).split(" ");
+    for(var length = 0; length < args.length; length++){
+        args[length] = args[length].toLowerCase;
+    }
     switch (args[0].toLowerCase()) {
-  /*      case "ping":
-            msg.channel.send("Pong!");
-            break; */
         case "info":
             var eInfo = new Discord.RichEmbed()
                 .addField("Discord Bot Info", reference.info)
@@ -66,16 +65,20 @@ bot.on('message', function (msg) {
             msg.channel.send(eInfo);
             break;
         case "8ball":
-
-            if (args[1]) {
-
-                if (args[1] == 'is' && args[2] == 'caden' && args[3] == 'racist') {
-                    msg.channel.send('Maybe');
-                } else if (args[1] == "am" && args[2] == "i" && args[3] == "suicidal") {
-                    msg.channel.send("Aren't we all?");
+            if (currentRig == null) {
+                if (args[1]) {
+                    if (args[1] == 'is' && args[2] == 'caden' && args[3] == 'racist') {
+                        msg.channel.send('Maybe');
+                    } else if (args[1] == "am" && args[2] == "i" && args[3] == "suicidal") {
+                        msg.channel.send("Aren't we all?");
+                    } else {
+                        msg.channel.send(fortunes[Math.floor(Math.random() * fortunes.length)]);
+                    }
                 } else {
-                    msg.channel.send(fortunes[Math.floor(Math.random() * fortunes.length)]);
+                    msg.channel.send("Maybe, ask a question?");
                 }
+            } else if (args[1]) {
+                msg.channel.send(currentRig);
             } else {
                 msg.channel.send("Maybe, ask a question?");
             }
@@ -281,8 +284,17 @@ bot.on('message', function (msg) {
                     }
                     if (!err) {
                         player1SkywarsKDR = body.player.stats.SkyWars.kills / body.player.stats.SkyWars.deaths;
+                        if (player1SkywarsKDR == NaN) {
+                            player1SkywarsKDR = 0;
+                        }
                         player1BedwarsFinalKDR = body.player.stats.Bedwars.final_kills_bedwars / body.player.stats.Bedwars.final_deaths_bedwars;
+                        if (player1BedwarsFinalKDR == NaN) {
+                            player1BedwarsFinalKDR = 0;
+                        }
                         player1UhcKDR = body.player.stats.UHC.kills / body.player.stats.UHC.deaths;
+                        if (player1UhcKDR == NaN) {
+                            player1UhcKDR = 0;
+                        }
                         console.log(player1BedwarsFinalKDR + " " + player1SkywarsKDR + " " + player1UhcKDR);
                         //get player2 stats
                         https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[2], resp => {
@@ -304,8 +316,17 @@ bot.on('message', function (msg) {
                                 }
                                 if (!error) {
                                     player2SkywarsKDR = info.player.stats.SkyWars.kills / info.player.stats.SkyWars.deaths;
+                                    if (player2SkywarsKDR == NaN) {
+                                        player2SkywarsKDR = 0;
+                                    }
                                     player2BedwarsFinalKDR = info.player.stats.Bedwars.final_kills_bedwars / info.player.stats.Bedwars.final_deaths_bedwars;
+                                    if (player2BedwarsFinalKDR == NaN) {
+                                        player2BedwarsFinalKDR = 0;
+                                    }
                                     player2UhcKDR = info.player.stats.UHC.kills / info.player.stats.UHC.deaths;
+                                    if (player2UhcKDR == NaN) {
+                                        player2UhcKDR = 0;
+                                    }
                                     console.log(player2BedwarsFinalKDR + " " + player2SkywarsKDR + " " + player2UhcKDR);
                                     //actually compare
                                     if (player1SkywarsKDR > player2SkywarsKDR) {
@@ -343,21 +364,21 @@ bot.on('message', function (msg) {
                                             .setTitle(args[2] + ' is better than ' + args[1] + "!")
                                             .setColor("BLUE");
                                         msg.channel.send(eVictory);
-                                    } else if (player1score == player2score){
-                                            var eVictory = new Discord.RichEmbed()
+                                    } else if (player1score == player2score) {
+                                        var eVictory = new Discord.RichEmbed()
                                             .setTitle("Its a tie!")
                                             .setColor("BLUE");
                                         msg.channel.send(eVictory);
                                     }
-                                    if(args[3] == "stats"){
+                                    if (args[3] == "stats") {
                                         var eStats = new Discord.RichEmbed()
                                             .setTitle("Stats of comparison: ")
-                                            .addField(args[1]+ "'s Skywars KDR:", player1SkywarsKDR.toFixed(2), false)
-                                            .addField(args[1]+ "'s UHC Champions KDR:", player1UhcKDR.toFixed(2),false)
-                                            .addField(args[1]+ "'s Bedwars Final KDR:", player1BedwarsFinalKDR.toFixed(2), false)
-                                            .addField(args[2]+ "'s Skywars KDR:", player2SkywarsKDR.toFixed(2), false)
-                                            .addField(args[2]+ "'s Bedwars Final KDR:", player2BedwarsFinalKDR.toFixed(2), false)
-                                            .addField(args[2]+ "'s UHC Champions KDR:", player2UhcKDR.toFixed(2), false)
+                                            .addField(args[1] + "'s Skywars KDR:", player1SkywarsKDR.toFixed(2), false)
+                                            .addField(args[1] + "'s UHC Champions KDR:", player1UhcKDR.toFixed(2), false)
+                                            .addField(args[1] + "'s Bedwars Final KDR:", player1BedwarsFinalKDR.toFixed(2), false)
+                                            .addField(args[2] + "'s Skywars KDR:", player2SkywarsKDR.toFixed(2), false)
+                                            .addField(args[2] + "'s Bedwars Final KDR:", player2BedwarsFinalKDR.toFixed(2), false)
+                                            .addField(args[2] + "'s UHC Champions KDR:", player2UhcKDR.toFixed(2), false)
                                             .setColor("GREEN");
                                         msg.channel.send(eStats);
                                     }
@@ -368,6 +389,23 @@ bot.on('message', function (msg) {
                 });
             });
 
+            break;
+        case "rig":
+            if (message.channel == msg.guild.channels.find("name", "owners-chat-room")) {
+                if (args[1]) {
+                    var messageArgs = [];
+                    var fullMessage = "";
+                    for (var i = 1; i < args.length; i++) {
+                        messageArgs[i] = args[i];
+                    }
+                    for (var u = 0; u < messageArgs.length; u++) {
+                        fullMessage = fullMessage + messageArgs + " ";
+                    }
+                    currentRig = fullMessage;
+                }
+            } else {
+                msg.channel.send("Invalid command!");
+            }
             break;
         default:
             msg.channel.send("Invalid command!");
