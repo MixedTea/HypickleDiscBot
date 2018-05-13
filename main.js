@@ -253,13 +253,13 @@ bot.on('message', function (msg) {
                 msg.channel.send(msg.author + " What two players do you want to compare?\n>compare [player1] [player2]");
                 break;
             }
-            var player1SkywarsKDR;
-            var player1BedwarsFinalKDR;
-            var player1UhcKDR;
+            var player1SkywarsKDR = 0;
+            var player1BedwarsFinalKDR = 0;
+            var player1UhcKDR = 0;
             var player1score = 0;
-            var player2SkywarsKDR;
-            var player2BedwarsFinalKDR;
-            var player2UhcKDR;
+            var player2SkywarsKDR = 0;
+            var player2BedwarsFinalKDR = 0;
+            var player2UhcKDR = 0;
             var player2score = 0;
             //getting player1 stats
             https.get('https://api.hypixel.net/player?key=' + API_KEY + '&name=' + args[1], res => {
