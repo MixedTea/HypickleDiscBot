@@ -343,6 +343,11 @@ bot.on('message', function (msg) {
                                             .setTitle(args[2] + ' is better than ' + args[1] + "!")
                                             .setColor("BLUE");
                                         msg.channel.send(eVictory);
+                                    } else if (player1score == player2score){
+                                            var eVictory = new Discord.RichEmbed()
+                                            .setTitle("Its a tie!")
+                                            .setColor("BLUE");
+                                        msg.channel.send(eVictory);
                                     }
                                     if(args[3] == "stats"){
                                         var eStats = new Discord.RichEmbed()
