@@ -79,11 +79,12 @@ bot.on('message', function (msg) {
                 }
             } else if (args[1]) {
                 msg.channel.send(currentRig);
+                currentRig == null;
             } else {
                 msg.channel.send("Maybe, ask a question?");
             }
             break;
-        case "player":
+        case "player":''
             https.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], res => {
                 res.setEncoding("utf8");
                 let body = "";
