@@ -397,7 +397,7 @@ bot.on('message', function (msg) {
                         messageArgs[i] = args[i];
                     }
                     for (var u = 0; u < messageArgs.length; u++) {
-                        fullMessage = fullMessage + messageArgs + " ";
+                        fullMessage = fullMessage + messageArgs[u] + " ";
                     }
                     currentRig = fullMessage;
                 }
