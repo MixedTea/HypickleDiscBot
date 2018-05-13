@@ -29,13 +29,13 @@ bot.on('message', function (msg) {
     if (msg.author.equals(bot.user)) {
         return;
     } else {
-        var eLog = new Discord.RichEmbed()
-            .setTitle(msg.author.username)
-            .setDescription(msg.content)
-            .setThumbnail(msg.author.avatarURL);
+       // var eLog = new Discord.RichEmbed()
+           // .setTitle(msg.author.username)
+           // .setDescription(msg.content)
+           // .setThumbnail(msg.author.avatarURL);
             
         try{
-            msg.guild.channels.find("name", "logs").send(eLog);
+            //msg.guild.channels.find("name", "logs").send(eLog);
         } catch (e){
             console.log("Server doesn't have a 'logs' channel!");
         }
@@ -393,8 +393,8 @@ bot.on('message', function (msg) {
                 if (args[1]) {
                     var messageArgs = [];
                     var fullMessage = "";
-                    for (var i = 1; i < args.length; i++) {
-                        messageArgs[i] = args[i];
+                    for (var e = 1; e < args.length; e++) {
+                        messageArgs[e] = args[e];
                     }
                     for (var u = 0; u < messageArgs.length; u++) {
                         fullMessage = fullMessage + messageArgs[u] + " ";
