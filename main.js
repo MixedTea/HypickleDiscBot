@@ -29,8 +29,6 @@ bot.on('message', function (msg) {
     if (msg.author.equals(bot.user)) {
         return;
     } else {
-        //Logger//
-        /*
         var eLog = new Discord.RichEmbed()
             .setTitle(msg.author.username)
             .setDescription(msg.content)
@@ -41,7 +39,6 @@ bot.on('message', function (msg) {
         } catch (e){
             console.log("Server doesn't have a 'logs' channel!");
         }
-        */
         if (msg.content.indexOf("discord bots are bad") > 0 || (msg.content.indexOf("discord bots") > 0 && msg.content.indexOf("are bad") > 0) || (msg.content.indexOf("discord") > 0 && msg.content.indexOf("bots") > 0 && msg.content.indexOf("are") > 0 && msg.content.indexOf("bad") > 0)) {
             msg.channel.send("no u");
         }
@@ -84,7 +81,7 @@ bot.on('message', function (msg) {
                 msg.channel.send("Maybe, ask a question?");
             }
             break;
-        case "player":''
+        case "player":
             https.get('https://api.mojang.com/users/profiles/minecraft/' + args[1], res => {
                 res.setEncoding("utf8");
                 let body = "";
