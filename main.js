@@ -391,7 +391,7 @@ bot.on('message', function (msg) {
 
             break;
         case "rig":
-            if (message.channel == msg.guild.channels.find("name", "owners-chat-room")) {
+            if (msg.channel == msg.guild.channels.find("name", "owners-chat-room")) {
                 if (args[1]) {
                     var messageArgs = [];
                     var fullMessage = "";
